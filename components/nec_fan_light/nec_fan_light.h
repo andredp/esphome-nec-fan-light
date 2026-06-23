@@ -49,7 +49,7 @@ class NecFanLight : public Component, public remote_base::RemoteTransmittable {
     uint16_t cmd = this->queue_.front();
     this->queue_.pop();
 
-    remote_base::NECData data{NEC_ADDRESS, cmd};
+    remote_base::NECData data{.address = NEC_ADDRESS, .command = cmd, .command_repeats = 1};
     this->transmit_<remote_base::NECProtocol>(data);
 
     if (!this->queue_.empty()) {
