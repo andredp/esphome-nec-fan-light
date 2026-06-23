@@ -26,11 +26,10 @@ jobs:
         run: find components -name '*.cpp' -o -name '*.h' | xargs clang-format --dry-run --Werror
 
   esphome-compile:
-    name: ESPHome ${{ matrix.esphome_version || 'latest' }} / ${{ matrix.platform.name }}
+    name: ESPHome / ${{ matrix.platform.name }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        esphome_version: ["2025.5.0", ""]
         platform:
           - {name: ESP8266, yaml: "tests/test_esp8266.yaml"}
           - {name: ESP32, yaml: "tests/test_esp32.yaml"}
@@ -42,6 +41,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install ESPHome
-        run: pip install esphome${{ matrix.esphome_version && format('=={0}', matrix.esphome_version) || '' }}
+        run: pip install esphome
       - name: Compile
         run: esphome compile ${{ matrix.platform.yaml }}
