@@ -10,6 +10,8 @@
 #include "esphome/components/button/button.h"
 #endif
 
+#include <queue>
+
 namespace esphome {
 namespace nec_fan_light {
 
@@ -22,12 +24,44 @@ static const uint16_t CMD_FAN_NATURAL = 0xB34C;
 static const uint16_t CMD_LIGHT_ON = 0xE21D;
 static const uint16_t CMD_LIGHT_OFF = 0xE31C;
 
+static const uint32_t DEFAULT_COMMAND_DELAY_MS = 500;
+
 class NecFanLight : public Component, public remote_base::RemoteTransmittable {
  public:
+  void set_command_delay(uint32_t delay_ms) { this->command_delay_ = delay_ms; }
+
   void send_command(uint16_t command) {
-    remote_base::NECData data{NEC_ADDRESS, command};
-    this->transmit_<remote_base::NECProtocol>(data);
+    this->queue_.push(command);
+    if (!this->sending_) {
+      this->process_queue_();
+    }
   }
+
+  void dump_config() override;
+
+ protected:
+  void process_queue_() {
+    if (this->queue_.empty()) {
+      this->sending_ = false;
+      return;
+    }
+    this->sending_ = true;
+    uint16_t cmd = this->queue_.front();
+    this->queue_.pop();
+
+    remote_base::NECData data{NEC_ADDRESS, cmd};
+    this->transmit_<remote_base::NECProtocol>(data);
+
+    if (!this->queue_.empty()) {
+      this->set_timeout("ir_queue", this->command_delay_, [this]() { this->process_queue_(); });
+    } else {
+      this->sending_ = false;
+    }
+  }
+
+  std::queue<uint16_t> queue_;
+  bool sending_{false};
+  uint32_t command_delay_{DEFAULT_COMMAND_DELAY_MS};
 };
 
 class NecFan : public Component, public fan::Fan {
@@ -43,6 +77,7 @@ class NecFan : public Component, public fan::Fan {
   }
 
   void setup() override { this->set_supported_preset_modes({"natural_wind"}); }
+  void dump_config() override;
 
   void control(const fan::FanCall &call) override;
 

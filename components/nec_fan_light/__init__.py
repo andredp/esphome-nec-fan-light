@@ -14,11 +14,13 @@ NecFanLight = nec_fan_light_ns.class_(
 )
 
 CONF_NEC_FAN_LIGHT_ID = "nec_fan_light_id"
+CONF_COMMAND_DELAY = "command_delay"
 
 CONFIG_SCHEMA = (
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(NecFanLight),
+            cv.Optional(CONF_COMMAND_DELAY, default="500ms"): cv.positive_time_period_milliseconds,
         }
     )
     .extend(cv.COMPONENT_SCHEMA)
@@ -30,3 +32,4 @@ async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
     await remote_base.register_transmittable(var, config)
+    cg.add(var.set_command_delay(config[CONF_COMMAND_DELAY]))

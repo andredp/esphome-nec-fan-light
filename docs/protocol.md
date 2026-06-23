@@ -144,18 +144,14 @@ LG: data=0x01FE8877
 
 - [x] Re-capture fan off with `dump: all` — confirmed: 0xE01F
 - [x] Determine total number of fan speed steps — 6 speeds
+- [x] Build ESPHome component repo (esphome-nec-fan-light)
 - [ ] Determine total number of brightness steps
 - [ ] Determine total number of CCT steps
-- [ ] Capture potential missing buttons (see below)
-- [ ] Build ESPHome component repo (esphome-nec-fan-light)
-- [ ] Add `ir_rf_proxy` to the Athom config for HA 2026.4+ integration
+- [ ] Add `ir_rf_proxy` to the Athom config for receiver-based state sync
 
 ## Potentially Missing Buttons (from Brilliant Mazzaro reference)
 
 Based on the Brilliant Mazzaro/Salerno which shares the same OEM codes:
-- **Fan Pulse** (natural wind mode) — Mazzaro code: `01FE32CD` (NEC cmd 0x4CB3?)
 - **Light SOS / Night mode** — Mazzaro code: `01FE30CF` (NEC cmd 0x0CF3?)
-- **RGB speed +** — unknown
-- **RGB speed -** — unknown
 
 Check your remote for any buttons not yet captured.

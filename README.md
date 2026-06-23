@@ -72,7 +72,7 @@ Since IR is one-directional, the component cannot know the actual device state i
 
 ## Protocol
 
-See the [protocol documentation](https://github.com/andredp/home-network/blob/main/estepa-fan-ir/estepa_protocol.md) for the full NEC code table.
+See the [protocol documentation](docs/protocol.md) for the full NEC code table.
 
 ## License
 

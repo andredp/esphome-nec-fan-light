@@ -6,6 +6,13 @@ namespace nec_fan_light {
 
 static const char *const TAG = "nec_fan_light";
 
+void NecFanLight::dump_config() {
+  ESP_LOGCONFIG(TAG, "NEC Fan Light:");
+  ESP_LOGCONFIG(TAG, "  Command delay: %u ms", this->command_delay_);
+}
+
+void NecFan::dump_config() { ESP_LOGCONFIG(TAG, "NEC Fan: speed_count=6, direction=yes, preset=natural_wind"); }
+
 void NecFan::control(const fan::FanCall &call) {
   if (call.get_state().has_value()) {
     bool new_state = *call.get_state();
@@ -28,6 +35,7 @@ void NecFan::control(const fan::FanCall &call) {
       target = 6;
 
     if (this->current_speed_ == 0) {
+      // Fan is off — turn on first (starts at speed 1)
       this->parent_->send_command(CMD_FAN_ON);
       this->current_speed_ = 1;
       this->state = true;
