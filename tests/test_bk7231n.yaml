@@ -1,0 +1,38 @@
+esphome:
+  name: test-nec-fan-light-bk7231n
+
+bk72xx:
+  board: cbu
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+logger:
+
+api:
+
+ota:
+  platform: esphome
+
+wifi:
+  ssid: "test"
+  password: "test1234"
+
+remote_transmitter:
+  pin: P7
+  carrier_duty_percent: 50%
+
+nec_fan_light:
+  id: ceiling_fan
+
+fan:
+  - platform: nec_fan_light
+    name: "Test Fan"
+    nec_fan_light_id: ceiling_fan
+
+light:
+  - platform: nec_fan_light
+    name: "Test Light"
+    nec_fan_light_id: ceiling_fan

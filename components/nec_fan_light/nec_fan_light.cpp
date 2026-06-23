@@ -22,8 +22,10 @@ void NecFan::control(const fan::FanCall &call) {
 
   if (call.get_speed().has_value()) {
     int target = *call.get_speed();
-    if (target < 1) target = 1;
-    if (target > 6) target = 6;
+    if (target < 1)
+      target = 1;
+    if (target > 6)
+      target = 6;
 
     if (this->current_speed_ == 0) {
       this->parent_->send_command(CMD_FAN_ON);
