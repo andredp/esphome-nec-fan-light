@@ -3,9 +3,12 @@
 #include "esphome/core/component.h"
 #include "esphome/components/fan/fan.h"
 #include "esphome/components/light/light_output.h"
-#include "esphome/components/button/button.h"
 #include "esphome/components/remote_base/nec_protocol.h"
 #include "esphome/components/remote_base/remote_base.h"
+
+#ifdef USE_BUTTON
+#include "esphome/components/button/button.h"
+#endif
 
 namespace esphome {
 namespace nec_fan_light {
@@ -67,6 +70,7 @@ class NecLight : public Component, public light::LightOutput {
   bool is_on_{false};
 };
 
+#ifdef USE_BUTTON
 class NecButton : public Component, public button::Button {
  public:
   NecButton(NecFanLight *parent, uint16_t command) : parent_(parent), command_(command) {}
@@ -77,6 +81,7 @@ class NecButton : public Component, public button::Button {
   NecFanLight *parent_;
   uint16_t command_;
 };
+#endif
 
 }  // namespace nec_fan_light
 }  // namespace esphome
