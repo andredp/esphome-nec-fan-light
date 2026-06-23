@@ -22,10 +22,8 @@ static const uint16_t CMD_LIGHT_OFF = 0xE31C;
 class NecFanLight : public Component, public remote_base::RemoteTransmittable {
  public:
   void send_command(uint16_t command) {
-    auto transmit = this->transmit();
     remote_base::NECData data{NEC_ADDRESS, command};
-    remote_base::NECProtocol().encode(transmit.get_data(), data);
-    transmit.perform();
+    this->transmit_<remote_base::NECProtocol>(data);
   }
 };
 
