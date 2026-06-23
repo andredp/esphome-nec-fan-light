@@ -36,9 +36,10 @@ class NecFan : public Component, public fan::Fan {
     traits.set_speed(true);
     traits.set_supported_speed_count(6);
     traits.set_direction(true);
-    traits.set_supported_preset_modes({"natural_wind"});
     return traits;
   }
+
+  void setup() override { this->set_supported_preset_modes({"natural_wind"}); }
 
   void control(const fan::FanCall &call) override;
 

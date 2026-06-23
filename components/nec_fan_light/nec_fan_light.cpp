@@ -22,10 +22,8 @@ void NecFan::control(const fan::FanCall &call) {
 
   if (call.get_speed().has_value()) {
     int target = *call.get_speed();
-    if (target < 1)
-      target = 1;
-    if (target > 6)
-      target = 6;
+    if (target < 1) target = 1;
+    if (target > 6) target = 6;
 
     if (this->current_speed_ == 0) {
       this->parent_->send_command(CMD_FAN_ON);
@@ -51,10 +49,10 @@ void NecFan::control(const fan::FanCall &call) {
     this->direction = *call.get_direction();
   }
 
-  if (!call.get_preset_mode().empty()) {
-    if (call.get_preset_mode() == "natural_wind") {
+  if (call.has_preset_mode()) {
+    const char *mode = call.get_preset_mode();
+    if (mode != nullptr && std::string(mode) == "natural_wind") {
       this->parent_->send_command(CMD_FAN_NATURAL);
-      this->preset_mode = "natural_wind";
     }
   }
 
